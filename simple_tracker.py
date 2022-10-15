@@ -103,8 +103,7 @@ class AmazonAPI:
         asins = self.get_asins(links)
         products = []
         for asin in asins:
-            product = self.get_single_product_info(asin)
-            if product:
+            if product := self.get_single_product_info(asin):
                 products.append(product)
         return products
 
@@ -120,14 +119,14 @@ class AmazonAPI:
         seller = self.get_seller()
         price = self.get_price()
         if title and seller and price:
-            product_info = {
+            return {
                 'asin': asin,
                 'url': product_short_url,
                 'title': title,
                 'seller': seller,
-                'price': price
+                'price': price,
             }
-            return product_info
+
         return None
 
     def get_title(self):
@@ -173,7 +172,7 @@ class AmazonAPI:
         return product_link[product_link.find('/dp/') + 4:product_link.find('/ref')]
 
     def shorten_url(self, asin):
-        return self.base_url + 'dp/' + asin
+        return f'{self.base_url}dp/{asin}'
 
     def convert_price(self, price):
         price = price.split(self.currency)[1]
